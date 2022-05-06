@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GenericMvc.Context;
 using GenericMvc.Models;
 
-namespace GenericMvc
+namespace GenericMvc.Controllers
 {
     public class ProductsController : Controller
     {
