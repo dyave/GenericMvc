@@ -20,6 +20,10 @@ namespace GenericMvc
                 .ForMember(dest => dest.ProductColor, src => src.MapFrom(s => s.Color))
                 .ForMember(dest => dest.ProductStandardCost, src => src.MapFrom(s => s.StandardCost))
                 .ForMember(dest => dest.ProductListPrice, src => src.MapFrom(s => s.ListPrice));
+
+            CreateMap<Address, AddressDto>();
+            CreateMap<Customer, CustomerDto>();
+            CreateMap<CustomerAddress, CustomerAddressDto>();
         }
     }
 }
