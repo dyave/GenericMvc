@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using GenericMvc.Dtos;
+using GenericMvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,14 @@ namespace GenericMvc
     {
         public MappingProfile()
         {
-            CreateMap<Models.Product, Dtos.ProductDto>();
+            CreateMap<Product, ProductDto>();
+
+            //ProductId and ProductNumber can be omitted:
+            CreateMap<Product, ProductDiffDto>()
+                .ForMember(dest => dest.ProductName, src => src.MapFrom(s => s.Name))
+                .ForMember(dest => dest.ProductColor, src => src.MapFrom(s => s.Color))
+                .ForMember(dest => dest.ProductStandardCost, src => src.MapFrom(s => s.StandardCost))
+                .ForMember(dest => dest.ProductListPrice, src => src.MapFrom(s => s.ListPrice));
         }
     }
 }

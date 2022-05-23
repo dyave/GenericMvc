@@ -28,9 +28,9 @@ namespace GenericMvc
         {
             services.AddControllersWithViews();
             services.AddAutoMapper(c => c.AddProfile<MappingProfile>(), typeof(Startup));
-            services.AddDbContext<AdventureWorksLT2019Context>(
-                opt => opt.UseSqlServer(Configuration.GetConnectionString("AdventureWorks"))
-                );
+            services.AddDbContext<AdventureWorksLT2019Context>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("AdventureWorks"))
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
