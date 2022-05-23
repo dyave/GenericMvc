@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GenericMvc.Context;
 using GenericMvc.Models;
+using AutoMapper;
+using GenericMvc.Dtos;
 
 namespace GenericMvc.Controllers
 {
@@ -15,23 +17,32 @@ namespace GenericMvc.Controllers
     public class ApiProductsController : ControllerBase
     {
         private readonly AdventureWorksLT2019Context _context;
+        private readonly IMapper _mapper;
 
-        public ApiProductsController(AdventureWorksLT2019Context context)
+        public ApiProductsController(AdventureWorksLT2019Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/ApiProducts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProduct()
         {
-            return await _context.Product.ToListAsync();
+            var products = await _context.Product.ToListAsync();
+
+            // No sé por qué pero no funciona con IEnumerable, pero sí con List:
+            return _mapper.Map<List<ProductDto>>(products);
         }
 
         // GET: api/ApiProducts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
+            //Example of simple sync mapping:
+            //var prod = _context.Product.ToList().FirstOrDefault();
+            //var prodDto = _mapper.Map<ProductDto>(prod);
+
             var product = await _context.Product.FindAsync(id);
 
             if (product == null)
@@ -39,7 +50,7 @@ namespace GenericMvc.Controllers
                 return NotFound();
             }
 
-            return product;
+            return _mapper.Map<ProductDto>(product);
         }
 
         // PUT: api/ApiProducts/5

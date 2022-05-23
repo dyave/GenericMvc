@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace GenericMvc
 {
@@ -26,7 +27,7 @@ namespace GenericMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //services.AddDbContext<AdventureWorksLT2019Context>(opt => opt)
+            services.AddAutoMapper(c => c.AddProfile<MappingProfile>(), typeof(Startup));
             services.AddDbContext<AdventureWorksLT2019Context>(
                 opt => opt.UseSqlServer(Configuration.GetConnectionString("AdventureWorks"))
                 );
