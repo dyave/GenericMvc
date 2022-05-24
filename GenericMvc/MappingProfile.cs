@@ -16,25 +16,33 @@ namespace GenericMvc
 
             //ProductId and ProductNumber can be omitted:
             CreateMap<Product, ProductDiffDto>()
-                .ForMember(dest => dest.ProductName, src => src.MapFrom(s => s.Name))
-                .ForMember(dest => dest.ProductColor, src => src.MapFrom(s => s.Color))
-                .ForMember(dest => dest.ProductStandardCost, src => src.MapFrom(s => s.StandardCost))
-                .ForMember(dest => dest.ProductListPrice, src => src.MapFrom(s => s.ListPrice));
+                .ForMember(dest => dest.ProductName, act => act.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ProductColor, act => act.MapFrom(src => src.Color))
+                .ForMember(dest => dest.ProductStandardCost, act => act.MapFrom(src => src.StandardCost))
+                .ForMember(dest => dest.ProductListPrice, act => act.MapFrom(src => src.ListPrice));
 
             CreateMap<Address, AddressDto>();
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerAddress, CustomerAddressDto>()
-                .ForMember(dest => dest.AddressDto, src => src.MapFrom(s => s.Address))
-                .ForMember(dest => dest.CustomerDto, src => src.MapFrom(s => s.Customer));
+                .ForMember(dest => dest.AddressDto, act => act.MapFrom(src => src.Address))
+                .ForMember(dest => dest.CustomerDto, act => act.MapFrom(src => src.Customer));
+
             CreateMap<CustomerAddress, CustomerAddressMergedDto>()
-                .ForMember(dest => dest.NameStyle, src => src.MapFrom(s => s.Customer.NameStyle))
-                .ForMember(dest => dest.Title, src => src.MapFrom(s => s.Customer.Title))
-                .ForMember(dest => dest.FirstName, src => src.MapFrom(s => s.Customer.FirstName))
-                .ForMember(dest => dest.MiddleName, src => src.MapFrom(s => s.Customer.MiddleName))
-                .ForMember(dest => dest.LastName, src => src.MapFrom(s => s.Customer.LastName))
-                .ForMember(dest => dest.AddressLine1, src => src.MapFrom(s => s.Address.AddressLine1))
-                .ForMember(dest => dest.AddressLine2, src => src.MapFrom(s => s.Address.AddressLine2))
-                .ForMember(dest => dest.City, src => src.MapFrom(s => s.Address.City));
+                .ForMember(dest => dest.NameStyle, act => act.MapFrom(src => src.Customer.NameStyle))
+                .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Customer.Title))
+                .ForMember(dest => dest.FirstName, act => act.MapFrom(src => src.Customer.FirstName))
+                .ForMember(dest => dest.MiddleName, act => act.MapFrom(src => src.Customer.MiddleName))
+                .ForMember(dest => dest.LastName, act => act.MapFrom(src => src.Customer.LastName))
+                .ForMember(dest => dest.AddressLine1, act => act.MapFrom(src => src.Address.AddressLine1))
+                .ForMember(dest => dest.AddressLine2, act => act.MapFrom(src => src.Address.AddressLine2))
+                .ForMember(dest => dest.City, act => act.MapFrom(src => src.Address.City));
+
+            CreateMap<Customer, CustomerComplexDto>()
+                .ForMember(dest => dest.FullName, act => act.MapFrom(src => new FullName {
+                    FirstName = src.FirstName,
+                    MiddleName = src.MiddleName,
+                    LastName = src.LastName
+                }));
         }
     }
 }
