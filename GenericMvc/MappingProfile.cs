@@ -23,7 +23,9 @@ namespace GenericMvc
 
             CreateMap<Address, AddressDto>();
             CreateMap<Customer, CustomerDto>();
-            CreateMap<CustomerAddress, CustomerAddressDto>();
+            CreateMap<CustomerAddress, CustomerAddressDto>()
+                .ForMember(dest => dest.AddressDto, src => src.MapFrom(s => s.Address))
+                .ForMember(dest => dest.CustomerDto, src => src.MapFrom(s => s.Customer));
         }
     }
 }

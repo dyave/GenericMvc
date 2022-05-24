@@ -7,8 +7,8 @@ namespace GenericMvc.Dtos
 {
     public class CustomerAddressDto
     {
-        public AddressDto Address { get; set; }
-        public CustomerDto Customer { get; set; }
+        public AddressDto AddressDto { get; set; }
+        public CustomerDto CustomerDto { get; set; }
 
         public string AddressType { get; set; }
         public Guid Rowguid { get; set; }
