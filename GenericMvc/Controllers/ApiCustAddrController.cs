@@ -29,7 +29,7 @@ namespace GenericMvc.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerAddressDto>>> GetCustomerAddress()
         {
-            var cas = await _context.CustomerAddress.ToListAsync();
+            var cas = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).ToListAsync();
             return _mapper.Map<List<CustomerAddressDto>>(cas);
         }
 
