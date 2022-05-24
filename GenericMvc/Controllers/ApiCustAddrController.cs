@@ -27,10 +27,10 @@ namespace GenericMvc.Controllers
 
         // GET: api/ApiCustAddr
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerAddressDto>>> GetCustomerAddress()
+        public async Task<ActionResult<IEnumerable<CustomerAddressMergedDto>>> GetCustomerAddress()
         {
             var cas = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).ToListAsync();
-            return _mapper.Map<List<CustomerAddressDto>>(cas);
+            return _mapper.Map<List<CustomerAddressMergedDto>>(cas);
         }
 
         // GET: api/ApiCustAddr/29485/1086
