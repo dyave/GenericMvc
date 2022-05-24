@@ -30,15 +30,15 @@ namespace GenericMvc.Controllers
         public async Task<ActionResult<IEnumerable<CustomerAddressDto>>> GetCustomerAddress()
         {
             var cas = await _context.CustomerAddress.ToListAsync();
-            return _mapper.Map<List<CustomerAddressDto>>(cas); ;
+            return _mapper.Map<List<CustomerAddressDto>>(cas);
         }
 
-        // GET: api/ApiCustAddr/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerAddressDto>> GetCustomerAddress(int id)
+        // GET: api/ApiCustAddr/29485/1086
+        [HttpGet("{customerId}/{addressId}")]
+        public async Task<ActionResult<CustomerAddressDto>> GetCustomerAddress(int customerId, int addressId)
         {
             //Composite FK. Fix this hardcode:
-            var customerAddress = await _context.CustomerAddress.FindAsync(id, 1086);
+            var customerAddress = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).FirstOrDefaultAsync(x =>  x.CustomerId== customerId && x.AddressId == addressId);
 
             if (customerAddress == null)
             {
