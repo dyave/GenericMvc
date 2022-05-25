@@ -28,14 +28,17 @@ namespace GenericMvc
                 .ForMember(dest => dest.CustomerDto, act => act.MapFrom(src => src.Customer));
 
             CreateMap<CustomerAddress, CustomerAddressMergedDto>()
+                .ForMember(dest => dest.CustomerId, act => act.MapFrom(src => src.Customer.CustomerId))
                 .ForMember(dest => dest.NameStyle, act => act.MapFrom(src => src.Customer.NameStyle))
                 .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Customer.Title))
                 .ForMember(dest => dest.FirstName, act => act.MapFrom(src => src.Customer.FirstName))
                 .ForMember(dest => dest.MiddleName, act => act.MapFrom(src => src.Customer.MiddleName))
                 .ForMember(dest => dest.LastName, act => act.MapFrom(src => src.Customer.LastName))
+                .ForMember(dest => dest.AddressId, act => act.MapFrom(src => src.Address.AddressId))
                 .ForMember(dest => dest.AddressLine1, act => act.MapFrom(src => src.Address.AddressLine1))
                 .ForMember(dest => dest.AddressLine2, act => act.MapFrom(src => src.Address.AddressLine2))
-                .ForMember(dest => dest.City, act => act.MapFrom(src => src.Address.City));
+                .ForMember(dest => dest.City, act => act.MapFrom(src => src.Address.City))
+                .ReverseMap();
 
             CreateMap<Customer, CustomerComplexDto>()
                 .ForMember(dest => dest.FullName, act => act.MapFrom(src => new FullName {

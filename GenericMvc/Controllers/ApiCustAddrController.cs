@@ -27,55 +27,60 @@ namespace GenericMvc.Controllers
 
         // GET: api/ApiCustAddr
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerAddressMergedDto>>> GetCustomerAddress()
+        public async Task<ActionResult<IEnumerable<CustomerAddressDto>>> GetCustomerAddress()
         {
             var cas = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).ToListAsync();
-            return _mapper.Map<List<CustomerAddressMergedDto>>(cas);
+            return _mapper.Map<List<CustomerAddressDto>>(cas);
         }
 
         // GET: api/ApiCustAddr/29485/1086
         [HttpGet("{customerId}/{addressId}")]
-        public async Task<ActionResult<CustomerAddressDto>> GetCustomerAddress(int customerId, int addressId)
+        public async Task<ActionResult<CustomerAddressMergedDto>> GetCustomerAddress(int customerId, int addressId)
         {
-            //Composite FK. Fix this hardcode:
-            var customerAddress = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).FirstOrDefaultAsync(x =>  x.CustomerId== customerId && x.AddressId == addressId);
+            var caRequest = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).FirstOrDefaultAsync(x => x.CustomerId == customerId && x.AddressId == addressId);
 
-            if (customerAddress == null)
+            if (caRequest == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<CustomerAddressDto>(customerAddress);
+            return _mapper.Map<CustomerAddressMergedDto>(caRequest);
         }
 
-        // PUT: api/ApiCustAddr/5
+        // PUT: api/ApiCustAddr/29485/1086
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomerAddress(int id, CustomerAddress customerAddress)
+        [HttpPut("{customerId}/{addressId}")]
+        public async Task<IActionResult> PutCustomerAddress(int customerId, int addressId, CustomerAddressMergedDto caDto)
         {
-            if (id != customerAddress.CustomerId)
-            {
-                return BadRequest();
-            }
+            //if (customerId != caDto.CustomerId || addressId != caDto.AddressId)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(customerAddress).State = EntityState.Modified;
+            var caRequest = await _context.CustomerAddress.Include(b => b.Address).Include(b => b.Customer).FirstOrDefaultAsync(x => x.CustomerId == customerId && x.AddressId == addressId);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerAddressExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //Mapping the client data to db-retrieved data to build the caRequest.
+            //Reverse mapping to type CustomerAddress, and subtypes Customer and Address. Duplicated properties like CustomerId and AddressId are both updated in type and subtype as well.
+            _mapper.Map(caDto, caRequest);
+
+            //_context.Entry(customerAddress).State = EntityState.Modified;
+
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CustomerAddressExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
             return NoContent();
         }
