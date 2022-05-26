@@ -45,7 +45,12 @@ namespace GenericMvc
                     FirstName = src.FirstName,
                     MiddleName = src.MiddleName,
                     LastName = src.LastName
-                }));
+                }))
+                .ReverseMap()
+                .ForMember(dest => dest.FirstName, act => act.MapFrom(src => src.FullName.FirstName))
+                .ForMember(dest => dest.MiddleName, act => act.MapFrom(src => src.FullName.MiddleName))
+                .ForMember(dest => dest.LastName, act => act.MapFrom(src => src.FullName.LastName))
+                ;
         }
     }
 }
